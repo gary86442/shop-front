@@ -13,6 +13,9 @@ onMounted(async () => {
   productId.value = route.params.launched_p_id // 正確設置產品ID
   await fetchInit(baseURL.concat(`/api/v1/launched_ps/${productId.value}`))
 })
+const addToCart = async () => {
+  await addCart()
+}
 </script>
 <template>
   <!-- {{ data.launched_p.Product }} -->
