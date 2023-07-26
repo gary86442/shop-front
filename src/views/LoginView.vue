@@ -1,92 +1,85 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import useFetchCard from '../composables/useFetchCard.js'
-import useAddCart from '../composables/useAddCart.js'
-const route = useRoute()
-const { data, fetchInit, errorMessage } = useFetchCard()
-const { newCart, addCart, message } = useAddCart()
+import axios from 'axios'
+import router from '../router'
+import { useAuthStore } from '../stores/useAuthStore.js'
+const { user, token } = useAuthStore()
+const login = async () => {
+  try {
+    // 發送 API 請求進行登入驗證
+    const res = await axios.post(
+      'https://little-river-2522.fly.dev/api/v1/users/login',
+      {
+        account: account.value,
+        password: password.value
+      }
+    )
+    // 登入成功，獲取回傳的 TOKEN
+    token.value = res.data.data.token
+    user.value = res.data.user
+    router.push('/')
 
-const productId = ref(0)
-const baseURL = 'https://little-river-2522.fly.dev'
-onMounted(async () => {
-  productId.value = route.params.launched_p_id // 正確設置產品ID
-  await fetchInit(baseURL.concat(`/api/v1/launched_ps/${productId.value}`))
-})
-const addToCart = async () => {
-  await addCart()
+    // 在這裡處理登入成功後的動作，例如導向其他頁面，顯示歡迎訊息等
+  } catch (error) {
+    // 登入失敗，處理錯誤
+    console.error('登入失敗：', error.res.data)
+    // 在這裡可以顯示錯誤訊息給使用者
+  }
 }
 </script>
 <template>
-  <!-- {{ data.launched_p.Product }} -->
-  <div class="container-fluid d-flex align-items-center justify-content-center">
-    <div
-      v-if="data.launched_p"
-      class="product-details d-flex align-item-center justify-content-center p-3"
-    >
-      <div class="product-image">
-        <!-- Replace this with the product image -->
-        <img src="https://picsum.photos/400/600" alt="Product" />
-      </div>
-      <div class="product-info p-4">
-        <h1>{{ data.launched_p.Product.name }}</h1>
-        <p class="mt-3">商品描述</p>
-        <p class="mt-3 align-items-start">
-          {{ data.launched_p.Product.description }}
-        </p>
-        <p class="mt-3">價格</p>
-        <p class="mt-3 align-items-start">$：{{ data.launched_p.price }}</p>
-        <button @click="addToCart">加入購物車</button>
-      </div>
+  <!-- {{ token }} -->
+  <div
+    class="container-fluid d-flex align-items-center justify-content-center login"
+  >
+    <div class="login-form">
+      <h1 class="logo">Logo</h1>
+      <form @submit.prevent="login">
+        <div class="mb-3">
+          <label for="account" class="form-label">帳號</label>
+          <input
+            v-model="account"
+            type="account"
+            class="form-control"
+            id="account"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">密碼</label>
+          <input
+            v-model="password"
+            type="password"
+            class="form-control"
+            id="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-danger btn-lg btn-block">
+          登入
+        </button>
+      </form>
     </div>
   </div>
 </template>
 
 <style>
-/* Add your custom CSS for Netflix style */
-.container {
-  flex-direction: column;
-
-  padding: 20px;
-  background-color: #222; /* Replace with Netflix background color */
-  color: #fff; /* Replace with Netflix text color */
+/* 在這裡可以自訂樣式以模仿 Netflix 風格 */
+.container-fluid login {
+  height: 100vh;
+  background-color: #111;
 }
 
-.product-details {
-  background-color: #333; /* Replace with product details background color */
-  max-width: 60%;
+.login-form {
+  padding: 40px;
+  border-radius: 8px;
+  background-color: #222;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.product-image img {
-  max-width: 300px;
-  /* Add other styles for product image if needed */
-}
-
-.product-info {
-  flex: 1;
-  padding: 20px;
-}
-
-.product-info h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
-}
-
-.product-info p {
-  font-size: 24px;
-  margin-bottom: 20px;
-  /* min-height: 150px; */
-  text-align: start;
-}
-
-.product-info button {
-  padding: 10px 20px;
-  background-color: #e50914; /* Replace with Netflix button color */
-  color: #fff; /* Replace with Netflix button text color */
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 4px;
+.logo {
+  color: #e50914;
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 </style>
