@@ -28,7 +28,9 @@ const login = async () => {
 </script>
 <template>
   <!-- {{ token }} -->
-  <div class="container-fluid d-flex align-items-center justify-content-center">
+  <div
+    class="container-fluid d-flex align-items-center justify-content-center login"
+  >
     <div class="login-form">
       <h1 class="logo">Logo</h1>
       <form @submit.prevent="login">
@@ -62,10 +64,7 @@ const login = async () => {
 
 <style>
 /* 在這裡可以自訂樣式以模仿 Netflix 風格 */
-.container-fluid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.container-fluid login {
   height: 100vh;
   background-color: #111;
 }
