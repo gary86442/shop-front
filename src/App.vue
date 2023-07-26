@@ -1,0 +1,21 @@
+<script setup>
+import NavBar from './components/NavBar.vue'
+import Footer from './components/Footer.vue'
+</script>
+
+<template>
+  <div>
+    <Product />
+    <NavBar />
+    <main class="text-center d-flex justify-content-center flex-grow-2">
+      <RouterView />
+    </main>
+    <Footer />
+  </div>
+</template>
+
+<style scoped>
+main {
+  min-height: 800px;
+}
+</style>
