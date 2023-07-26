@@ -1,8 +1,9 @@
 <script setup>
 import axios from 'axios'
 import router from '../router'
+import { storeToRefs } from 'pinia'
 import { useAuthStore } from '../stores/useAuthStore.js'
-const { user, token } = useAuthStore()
+const { user, token } = storeToRefs(useAuthStore())
 const login = async () => {
   try {
     // 發送 API 請求進行登入驗證
@@ -13,6 +14,7 @@ const login = async () => {
         password: password.value
       }
     )
+    console.log(res.data)
     // 登入成功，獲取回傳的 TOKEN
     token.value = res.data.data.token
     user.value = res.data.user
@@ -21,13 +23,12 @@ const login = async () => {
     // 在這裡處理登入成功後的動作，例如導向其他頁面，顯示歡迎訊息等
   } catch (error) {
     // 登入失敗，處理錯誤
-    console.error('登入失敗：', error.res.data)
+    console.error(error)
     // 在這裡可以顯示錯誤訊息給使用者
   }
 }
 </script>
 <template>
-  <!-- {{ token }} -->
   <div
     class="container-fluid d-flex align-items-center justify-content-center login"
   >
