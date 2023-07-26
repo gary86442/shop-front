@@ -14,7 +14,6 @@ const login = async () => {
         password: password.value
       }
     )
-    console.log(res.data)
     // 登入成功，獲取回傳的 TOKEN
     token.value = res.data.data.token
     user.value = res.data.user

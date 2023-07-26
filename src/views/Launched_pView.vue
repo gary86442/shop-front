@@ -1,21 +1,35 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import router from '../router'
 import { useRoute } from 'vue-router'
 import useFetchCard from '../composables/useFetchCard.js'
 import useAddCart from '../composables/useAddCart.js'
+import { useBaseURLStore } from '../stores/useBaseURLStore.js'
+import { useAuthStore } from '../stores/useAuthStore'
+const { token } = useAuthStore()
+const { baseURL } = useBaseURLStore()
 const route = useRoute()
 const { data, fetchInit, errorMessage } = useFetchCard()
-const { newCart, addCart, message } = useAddCart()
+const { newCart, addCart } = useAddCart()
+
+const addToCart = async launched_p_id => {
+  if (!token) {
+    router.push('/login')
+    window.alert('請先登入')
+  }
+  await addCart(baseURL.concat('/api/v1/carts'), { launched_p_id }, token)
+  // newCart.value = res.data.cart_product
+  // console.log(newCart.value)
+}
 
 const productId = ref(0)
-const baseURL = 'https://little-river-2522.fly.dev'
+
 onMounted(async () => {
   productId.value = route.params.launched_p_id // 正確設置產品ID
   await fetchInit(baseURL.concat(`/api/v1/launched_ps/${productId.value}`))
 })
 </script>
 <template>
-  <!-- {{ data.launched_p.Product }} -->
   <div class="container-fluid d-flex align-items-center justify-content-center">
     <div
       v-if="data.launched_p"
@@ -31,9 +45,15 @@ onMounted(async () => {
         <p class="mt-3 align-items-start">
           {{ data.launched_p.Product.description }}
         </p>
-        <p class="mt-3">價格</p>
-        <p class="mt-3 align-items-start">$：{{ data.launched_p.price }}</p>
-        <button @click="addToCart">加入購物車</button>
+        <div class="mt-4">
+          <p class="m-1">價格：</p>
+          <p class="align-items-start">　　{{ data.launched_p.price }}$</p>
+        </div>
+        <div class="mt-4">
+          <p class="m-1">庫存：</p>
+          <p class="align-items-start">　　{{ data.launched_p.stock }}</p>
+        </div>
+        <button @click="addToCart(data.launched_p.id)">加入購物車</button>
       </div>
     </div>
   </div>
