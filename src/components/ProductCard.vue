@@ -2,7 +2,6 @@
 const props = defineProps({
   image: String,
   title: String,
-  // description: String,
   price: Number,
   id: Number
 })
