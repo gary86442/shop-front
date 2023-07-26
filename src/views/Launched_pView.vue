@@ -77,8 +77,4 @@ onMounted(async () => {
   font-weight: bold;
   border-radius: 4px;
 }
-
-.product-info button:hover {
-  /* Add styles for button hover effect */
-}
 </style>
