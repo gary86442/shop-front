@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '../stores/useAuthStore'
 const { token, user, logout } = storeToRefs(useAuthStore())
@@ -11,7 +11,8 @@ const { token, user, logout } = storeToRefs(useAuthStore())
     <ul class="menu d-flex justify-content-between align-items-center m-2">
       <li><a class="m-3" href="#">賣家中心</a></li>
       <li><a class="m-3" href="#">購物車</a></li>
-      <li v-if="user === ''">
+      <!-- ! 狀態無法正確顯示  user -->
+      <li v-if="!token">
         <router-link to="/login" class="btn">登入</router-link>
       </li>
       <li v-else><a class="m-3" href="#">使用者</a></li>
