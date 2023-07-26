@@ -6,7 +6,7 @@ import Footer from './components/Footer.vue'
 <template>
   <div>
     <NavBar />
-    <main class="text-center d-flex justify-content-center flex-grow-2">
+    <main class="text-center d-flex justify-content-center">
       <RouterView />
     </main>
     <Footer />
@@ -16,5 +16,6 @@ import Footer from './components/Footer.vue'
 <style scoped>
 main {
   min-height: 800px;
+  margin-top: 300px;
 }
 </style>
