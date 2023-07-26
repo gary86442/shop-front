@@ -1,16 +1,21 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import useFetchCard from '../composables/useFetchCard.js'
-
+const route = useRoute()
 const { data, fetchInit, errorMessage } = useFetchCard()
+const productId = ref(0)
 const baseURL = 'https://little-river-2522.fly.dev'
 onMounted(async () => {
-  await fetchInit(baseURL.concat('/api/v1/launched_ps/'))
+  productId.value = route.params.launched_p_id // 正確設置產品ID
+  await fetchInit(baseURL.concat(`/api/v1/launched_ps/${productId.value}`))
 })
 </script>
 <template>
+  <!-- {{ data.launched_p.Product }} -->
   <div class="container-fluid d-flex align-items-center justify-content-center">
     <div
+      v-if="data.launched_p"
       class="product-details d-flex align-item-center justify-content-center p-3"
     >
       <div class="product-image">
@@ -18,12 +23,13 @@ onMounted(async () => {
         <img src="https://picsum.photos/400/600" alt="Product" />
       </div>
       <div class="product-info p-4">
-        <h1>商品標題</h1>
+        <h1>{{ data.launched_p.Product.name }}</h1>
         <p class="mt-3">商品描述</p>
         <p class="mt-3 align-items-start">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id
-          magna ac est cursus ornare vel eu odio. Duis luctus interdum cursus.
+          {{ data.launched_p.Product.description }}
         </p>
+        <p class="mt-3">價格</p>
+        <p class="mt-3 align-items-start">$：{{ data.launched_p.price }}</p>
         <button>立即購買</button>
       </div>
     </div>
@@ -63,7 +69,7 @@ onMounted(async () => {
 .product-info p {
   font-size: 24px;
   margin-bottom: 20px;
-  min-height: 150px;
+  /* min-height: 150px; */
   text-align: start;
 }
 

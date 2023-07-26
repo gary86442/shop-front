@@ -13,17 +13,9 @@ const router = createRouter({
     {
       path: '/launched_ps/:launched_p_id',
       name: 'product',
-      children: [
-        {
-          path: '',
-          name: 'launched_p',
-          component: Launched_pView
-        }
-      ]
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      component: Launched_pView
     }
+    // { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
   ]
 })
 

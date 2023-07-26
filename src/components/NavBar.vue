@@ -1,6 +1,7 @@
 <template>
   <nav class="navbar d-flex justify-content-between align-items-center">
-    <div class="logo ms-5">Logo</div>
+    <router-link class="logo ms-5" to="/">Logo</router-link>
+
     <ul class="menu d-flex justify-content-between align-items-center m-2">
       <li><a class="m-3" href="#">賣家中心</a></li>
       <li><a class="m-3" href="#">購物車</a></li>
